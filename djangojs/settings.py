@@ -9,7 +9,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
-TEST_RUNNER = 'django.test.simple.DjangoTestSuiteRunner'
+# TEST_RUNNER = 'django.test.simple.DjangoTestSuiteRunner'
 
 PROJECT_ROOT = abspath(join(dirname(__file__), '..'))
 
@@ -100,9 +100,9 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
+TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + [
     'djangojs.tests.custom_processor',
-)
+]
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -126,12 +126,12 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
-PROJECT_APPS = (
+PROJECT_APPS = [
     'djangojs',
     # 'djangojs.fake',
-)
+]
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -140,7 +140,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
-) + PROJECT_APPS
+] + PROJECT_APPS
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

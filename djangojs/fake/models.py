@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from django import VERSION as DJANGO_VERSION
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, UserManager
 
 
 class FakeModel(models.Model):
@@ -13,11 +13,8 @@ class FakeModel(models.Model):
         )
 
 
-if DJANGO_VERSION >= (1, 5):
-    from django.contrib.auth.models import AbstractBaseUser, UserManager
+class CustomUser(AbstractBaseUser):
+    identifier = models.CharField(max_length=40, unique=True, db_index=True)
+    USERNAME_FIELD = 'identifier'
 
-    class CustomUser(AbstractBaseUser):
-        identifier = models.CharField(max_length=40, unique=True, db_index=True)
-        USERNAME_FIELD = 'identifier'
-
-        objects = UserManager()
+    objects = UserManager()

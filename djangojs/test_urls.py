@@ -43,21 +43,21 @@ class QUnitTestView(QUnitView):
     js_files = 'js/test/qunit/qunit-*.js'
 
 
-fake_patterns = patterns('',
+fake_patterns = [
     url(r'^fake$', TestFormView.as_view(), name='fake'),
-)
+]
 
-nested_patterns = patterns('',
+nested_patterns = [
     url(r'^nested/', include(fake_patterns, namespace="nested", app_name="appnested")),
-)
+]
 
-other_fake_patterns = patterns('',
+other_fake_patterns = [
     url(r'^fake$', TestFormView.as_view(), name='fake'),
-)
+]
 
-test_patterns = patterns('',
+test_patterns = [
     url(r'^form$', TestFormView.as_view(), name='test_form'),
-    url(r'^unamed$', 'djangojs.test_urls.unnamed'),
+    url(r'^unamed$', unnamed),
     url(r'^unnamed-class$', TestFormView.as_view()),
     url(r'^arg/(\d+)$', TemplateView.as_view(template_name='djangojs/test/test1.html'), name='test_arg'),
     url(r'^arg/(\d+)/(\w)$', TemplateView.as_view(template_name='djangojs/test/test1.html'), name='test_arg_multi'),
@@ -80,9 +80,9 @@ test_patterns = patterns('',
     url(r'^namespace2/', include(nested_patterns, namespace="ns2", app_name="app2")),
     url(r'^namespace3/', include(fake_patterns, namespace="ns3")),
     url(r'^test\.json$', TestFormView.as_view(), name='escaped'),
-)
+]
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', DjangoJsTestView.as_view(), name='djangojs_tests'),
 
     url(r'^djangojs/', include('djangojs.urls')),
@@ -91,4 +91,4 @@ urlpatterns = patterns('',
     url(r'^qunit/$', QUnitTestView.as_view(), name='djangojs_qunit_tests'),
 
     url(r'^test/', include(test_patterns)),
-)
+]

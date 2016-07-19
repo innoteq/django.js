@@ -6,9 +6,9 @@ from djangojs.runners import JsTestCase, JsTemplateTestCase, JasmineSuite, QUnit
 
 
 @override_settings(
-    TEMPLATE_CONTEXT_PROCESSORS=global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
+    TEMPLATE_CONTEXT_PROCESSORS=global_settings.TEMPLATE_CONTEXT_PROCESSORS + [
         'djangojs.tests.custom_processor',
-    ),
+    ],
     LANGUAGES=(
         ('en-us', _('English')),
         ('fr', _('French')),

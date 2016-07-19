@@ -9,26 +9,27 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.management import update_contenttypes
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.core.urlresolvers import reverse
-from django.db.models import get_app
+from django.apps import apps
 from django.middleware.locale import LocaleMiddleware
 from django.test import TestCase
 from django.test.client import RequestFactory
 from django.test.utils import override_settings
 from django.utils import six
 from django.utils import translation
-from django.utils import unittest
-
+import unittest
 from djangojs.conf import settings
 from djangojs.utils import class_from_string
 
-TEST_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
+
+TEST_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + [
     'djangojs.tests.custom_processor',
     'django.core.context_processors.i18n',
-)
+]
 
-TEST_MIDDLEWARES = global_settings.MIDDLEWARE_CLASSES + (
+
+TEST_MIDDLEWARES = global_settings.MIDDLEWARE_CLASSES + [
     'django.middleware.locale.LocaleMiddleware',
-)
+]
 
 
 class ContextTestMixin(object):
@@ -211,7 +212,7 @@ class ContextTestMixin(object):
 
     def fake_permissions(self):
         ''' Add fake app missing content types and permissions'''
-        app = get_app('fake')
+        app = apps.get_app_config('fake')
         update_contenttypes(app, None, 0)
         create_permissions(app, None, 0)
 
