@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
-import sys
+
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
 
 from os.path import join, isdir
 
 from django.conf.urls import url
 from django.views.i18n import javascript_catalog
+from django.apps import apps
 
 from djangojs.conf import settings
 from djangojs.views import UrlsJsonView, ContextJsonView, JsInitView
@@ -15,17 +18,14 @@ def js_info_dict():
         'packages': [],
     }
 
-    for app in settings.INSTALLED_APPS:
-        if settings.JS_I18N_APPS and app not in settings.JS_I18N_APPS:
+    for app in apps.get_app_configs():
+        if settings.JS_I18N_APPS and app.label not in settings.JS_I18N_APPS:
             continue
-        if settings.JS_I18N_APPS_EXCLUDE and app in settings.JS_I18N_APPS_EXCLUDE:
+        if settings.JS_I18N_APPS_EXCLUDE and app.label in settings.JS_I18N_APPS_EXCLUDE:
             continue
-        if app not in sys.modules:
-            __import__(app)
-        module = sys.modules[app]
-        for path in module.__path__:
+        for path in app.path:
             if isdir(join(path, 'locale')):
-                js_info_dict['packages'].append(app)
+                js_info_dict['packages'].append(app.name)
                 break
     return js_info_dict
 
