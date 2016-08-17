@@ -7,7 +7,7 @@ from __future__ import unicode_literals
 from django import template
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils import six
-from django.utils.html import mark_safe
+from django.utils.html import mark_safe, format_html, format_html_join
 
 from djangojs import JQUERY_MIGRATE_VERSION
 from djangojs.conf import settings
@@ -113,9 +113,9 @@ def javascript(filename, type='text/javascript'):
     '''A simple shortcut to render a ``script`` tag to a static javascript file'''
     if '?' in filename and len(filename.split('?')) is 2:
         filename, params = filename.split('?')
-        return mark_safe('<script type="%s" src="%s?%s"></script>' % (type, staticfiles_storage.url(filename), params))
+        return format_html('<script type="{}" src="{}?{}"></script>', type, staticfiles_storage.url(filename), params)
     else:
-        return mark_safe('<script type="%s" src="%s"></script>' % (type, staticfiles_storage.url(filename)))
+        return format_html('<script type="{}" src="{}"></script>', type, staticfiles_storage.url(filename))
 
 
 @register.simple_tag
@@ -139,7 +139,7 @@ def coffee(filename):
 @register.simple_tag
 def css(filename):
     '''A simple shortcut to render a ``link`` tag to a static CSS file'''
-    return mark_safe('<link rel="stylesheet" type="text/css" href="%s" />' % staticfiles_storage.url(filename))
+    return format_html('<link rel="stylesheet" type="text/css" href="{}" />', staticfiles_storage.url(filename))
 
 
 def _boolean(value):
@@ -161,7 +161,7 @@ def jquery_js(version=None, migrate=False):
     libs = [js_lib('jquery-%s%s.js' % (version, suffix))]
     if _boolean(migrate):
         libs.append(js_lib('jquery-migrate-%s%s.js' % (JQUERY_MIGRATE_VERSION, suffix)))
-    return mark_safe('\n'.join(libs))
+    return format_html_join('\n', '{}', libs)
 
 
 @register.inclusion_tag('djangojs/django_js_tag.html', takes_context=True)
