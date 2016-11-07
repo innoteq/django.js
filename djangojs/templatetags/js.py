@@ -161,7 +161,7 @@ def jquery_js(version=None, migrate=False):
     libs = [js_lib('jquery-%s%s.js' % (version, suffix))]
     if _boolean(migrate):
         libs.append(js_lib('jquery-migrate-%s%s.js' % (JQUERY_MIGRATE_VERSION, suffix)))
-    return format_html_join('\n', '{}', libs)
+    return format_html_join('\n', '{}', ((l, ) for l in libs))
 
 
 @register.inclusion_tag('djangojs/django_js_tag.html', takes_context=True)
